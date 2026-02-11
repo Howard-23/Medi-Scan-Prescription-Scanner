@@ -10,7 +10,10 @@ import {
   Scan, 
   Loader2,
   AlertCircle,
-  Smartphone
+  Smartphone,
+  Zap,
+  Aperture,
+  Focus
 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import dynamic from "next/dynamic";
@@ -73,40 +76,53 @@ export function CameraScanner({ onImageCapture, isProcessing }: CameraScannerPro
       <div className="space-y-4">
         <Card
           className="
-            relative border-2 border-dashed rounded-xl p-8 transition-all duration-200
+            relative border-2 border-dashed rounded-2xl p-8 transition-all duration-300
             flex flex-col items-center justify-center text-center
-            min-h-[250px] cursor-pointer hover:border-emerald-400 dark:hover:border-emerald-600
-            bg-slate-50 dark:bg-slate-900/50
+            min-h-[280px] cursor-pointer overflow-hidden
+            hover:border-violet-400 dark:hover:border-violet-500 hover:bg-violet-50/30 dark:hover:bg-violet-950/20
+            bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800
           "
           onClick={() => !isProcessing && setIsCameraOpen(true)}
         >
-          <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center mb-4">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-dot-pattern opacity-30" />
+          
+          {/* Icon */}
+          <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center mb-5 shadow-lg shadow-violet-500/30">
             {isMobile ? (
-              <Smartphone className="h-8 w-8 text-emerald-600" />
+              <Smartphone className="h-10 w-10 text-white" />
             ) : (
-              <Camera className="h-8 w-8 text-emerald-600" />
+              <Camera className="h-10 w-10 text-white" />
             )}
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center">
+              <Zap className="h-3 w-3 text-white" />
+            </div>
           </div>
-          <p className="text-lg font-medium text-slate-900 dark:text-slate-100">
+          
+          {/* Text */}
+          <p className="text-lg font-semibold text-slate-900 dark:text-slate-100 relative z-10">
             {isMobile ? "Tap to Open Camera" : "Click to Open Camera"}
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Scan prescription using your {isMobile ? "phone" : "webcam"}
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 relative z-10">
+            Scan prescription using your {isMobile ? "phone camera" : "webcam"}
           </p>
+          
+          {/* Mobile Badge */}
           {isMobile && (
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
-              Optimized for mobile scanning
-            </p>
+            <span className="mt-4 px-3 py-1 rounded-full text-xs font-medium bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 relative z-10">
+              <Aperture className="h-3 w-3 inline mr-1" />
+              Optimized for mobile
+            </span>
           )}
         </Card>
 
         {/* Alternative option for mobile */}
         {isMobile && (
-          <div className="text-center">
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
-              Having trouble with camera?
+          <div className="text-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">
+              Having trouble with the camera?
             </p>
-            <label className="cursor-pointer">
+            <label className="cursor-pointer inline-block">
               <input
                 type="file"
                 accept="image/*"
@@ -124,7 +140,12 @@ export function CameraScanner({ onImageCapture, isProcessing }: CameraScannerPro
                 }}
                 disabled={isProcessing}
               />
-              <Button variant="outline" type="button" disabled={isProcessing}>
+              <Button 
+                variant="outline" 
+                type="button" 
+                disabled={isProcessing}
+                className="border-violet-300 text-violet-700 hover:bg-violet-50 dark:border-violet-800 dark:text-violet-300 dark:hover:bg-violet-900/30"
+              >
                 <Camera className="mr-2 h-4 w-4" />
                 Take Photo Directly
               </Button>
@@ -138,13 +159,13 @@ export function CameraScanner({ onImageCapture, isProcessing }: CameraScannerPro
   return (
     <div className="space-y-4">
       {cameraError ? (
-        <Alert variant="destructive">
+        <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>{cameraError}</AlertDescription>
         </Alert>
       ) : null}
 
-      <div className="relative rounded-xl overflow-hidden bg-black">
+      <div className="relative rounded-2xl overflow-hidden bg-black shadow-2xl">
         <Webcam
           audio={false}
           ref={webcamRef}
@@ -158,12 +179,28 @@ export function CameraScanner({ onImageCapture, isProcessing }: CameraScannerPro
 
         {/* Camera Overlay Frame */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 border-2 border-white/30 m-8 rounded-lg">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+          
+          {/* Scanning Frame */}
+          <div className="absolute inset-0 border-2 border-white/20 m-10 rounded-xl">
             {/* Corner markers */}
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-emerald-500 -mt-1 -ml-1" />
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-emerald-500 -mt-1 -mr-1" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-emerald-500 -mb-1 -ml-1" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-emerald-500 -mb-1 -mr-1" />
+            <div className="absolute top-0 left-0 w-10 h-10 border-t-4 border-l-4 border-cyan-400 -mt-1 -ml-1 rounded-tl-lg" />
+            <div className="absolute top-0 right-0 w-10 h-10 border-t-4 border-r-4 border-cyan-400 -mt-1 -mr-1 rounded-tr-lg" />
+            <div className="absolute bottom-0 left-0 w-10 h-10 border-b-4 border-l-4 border-cyan-400 -mb-1 -ml-1 rounded-bl-lg" />
+            <div className="absolute bottom-0 right-0 w-10 h-10 border-b-4 border-r-4 border-cyan-400 -mb-1 -mr-1 rounded-br-lg" />
+            
+            {/* Scanning line animation */}
+            <div 
+              className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+              style={{
+                animation: "scanMove 2s linear infinite"
+              }}
+            />
+          </div>
+          
+          {/* Focus helper */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50">
+            <Focus className="h-16 w-16 text-white/30" />
           </div>
         </div>
 
@@ -171,17 +208,17 @@ export function CameraScanner({ onImageCapture, isProcessing }: CameraScannerPro
         <button
           onClick={() => setIsCameraOpen(false)}
           disabled={isProcessing}
-          className="absolute top-3 right-3 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors disabled:opacity-50"
+          className="absolute top-4 right-4 p-2.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-all disabled:opacity-50 hover:scale-110 backdrop-blur-sm"
         >
           <X className="h-5 w-5" />
         </button>
 
         {/* Camera controls */}
-        <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-4">
+        <div className="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-6">
           <button
             onClick={toggleCamera}
             disabled={isProcessing}
-            className="p-3 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors disabled:opacity-50"
+            className="p-3 rounded-full bg-black/50 text-white hover:bg-black/70 transition-all disabled:opacity-50 hover:scale-110 backdrop-blur-sm"
           >
             <SwitchCamera className="h-6 w-6" />
           </button>
@@ -189,22 +226,43 @@ export function CameraScanner({ onImageCapture, isProcessing }: CameraScannerPro
           <button
             onClick={handleCapture}
             disabled={isProcessing}
-            className="p-4 rounded-full bg-white text-black hover:bg-slate-100 transition-colors disabled:opacity-50 shadow-lg"
+            className="relative p-5 rounded-full bg-white text-black hover:bg-slate-100 transition-all disabled:opacity-50 shadow-2xl hover:scale-105"
           >
             {isProcessing ? (
-              <Loader2 className="h-8 w-8 animate-spin" />
+              <Loader2 className="h-10 w-10 animate-spin" />
             ) : (
-              <Scan className="h-8 w-8" />
+              <>
+                <Scan className="h-10 w-10" />
+                <div className="absolute inset-0 rounded-full border-4 border-cyan-400 animate-ping opacity-30" />
+              </>
             )}
           </button>
 
-          <div className="w-12" /> {/* Spacer for alignment */}
+          <div className="w-14" />
+        </div>
+        
+        {/* Instruction text */}
+        <div className="absolute top-4 left-0 right-0 text-center">
+          <p className="text-white/80 text-sm font-medium bg-black/30 inline-block px-4 py-1.5 rounded-full backdrop-blur-sm">
+            Position prescription within the frame
+          </p>
         </div>
       </div>
 
-      <p className="text-center text-sm text-slate-500 dark:text-slate-400">
-        Position the prescription within the frame and tap the capture button
+      <p className="text-center text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center gap-2">
+        <Aperture className="h-4 w-4 text-violet-500" />
+        Make sure the text is clearly visible and well-lit
       </p>
+      
+      {/* Global styles for scan animation */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes scanMove {
+          0% { transform: translateY(0); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateY(200px); opacity: 0; }
+        }
+      `}} />
     </div>
   );
 }

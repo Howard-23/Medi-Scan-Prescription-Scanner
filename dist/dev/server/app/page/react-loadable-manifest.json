@@ -1,0 +1,11 @@
+{
+  "[project]/components/prescription-reader.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/components/prescription-reader.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_04df082e._.js",
+      "static/chunks/_84c4f3c4._.js",
+      "static/chunks/node_modules_bc6eadc4._.js",
+      "static/chunks/components_prescription-reader_tsx_76cd0f6b._.js"
+    ]
+  }
+}
